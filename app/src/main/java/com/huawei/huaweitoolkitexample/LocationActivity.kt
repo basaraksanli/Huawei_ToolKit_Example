@@ -1,6 +1,7 @@
 package com.huawei.huaweitoolkitexample
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class LocationActivity : AppCompatActivity() , LocationListener{
@@ -31,6 +34,11 @@ class LocationActivity : AppCompatActivity() , LocationListener{
             createLocationRequest()
         }
 
+        val floatingActionButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        floatingActionButton.setOnClickListener{
+            val analyticsIntent = Intent(this, AnalyticsActivity::class.java)
+            startActivity(analyticsIntent)
+        }
 
     }
 
