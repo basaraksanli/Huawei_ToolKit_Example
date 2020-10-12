@@ -5,30 +5,31 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.StreetViewPanoramaOptions
+import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.maps.android.clustering.ClusterManager
 import java.util.*
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
-    private val TAG: String = MainActivity::class.java.simpleName
 
     private val REQUEST_LOCATION_PERMISSION = 1
     val INITIAL_ZOOM = 12f
     private var mMap: GoogleMap? = null
 
-    private var mClusterManager: ClusterManager<MyClusterItem>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,35 +48,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.map_options, menu);
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.normal_map -> {
-                mMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
-                return true
-            }
-            R.id.hybrid_map -> {
-                mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
-                return true
-            }
-            R.id.satellite_map -> {
-                mMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
-                return true
-            }
-            R.id.terrain_map -> {
-                mMap?.mapType = GoogleMap.MAP_TYPE_TERRAIN
-                return true
-            }
-            else -> {
-                return super.onOptionsItemSelected(item);
-            }
-        }
-    }
 
     override fun onMapReady(p0: GoogleMap?) {
         mMap = p0
@@ -95,8 +67,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         enableMyLocation(mMap!!) // Enable location tracking.
         setInfoWindowClickToPanorama(mMap!!)
 
-        setUpClusterer(p0!!)
-
     }
 
     private fun setMapLongClick(map: GoogleMap) {
@@ -109,13 +79,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 latLng.longitude
             )
 
-            createClusterMarker(
-                latLng.latitude,
-                latLng.longitude,
-                getString(R.string.dropped_pin),
-                snippet
-            )
-
+            val markerOptions = MarkerOptions().position(latLng).snippet(snippet).title("Pinned Place")
+            map.addMarker(markerOptions)
 
         }
     }
@@ -123,8 +88,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
 
-            createClusterMarker(poi.latLng.latitude, poi.latLng.longitude, poi.name, "snippet")
-
+            val markerOptions = MarkerOptions().position(poi.latLng).title(poi.name).snippet(poi.latLng.toString())
+            val poiMarker =map.addMarker(markerOptions)
+            poiMarker.tag = "poi"
 
         }
     }
@@ -170,19 +136,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpClusterer(map: GoogleMap) {
-        mClusterManager = ClusterManager(this, map)
-
-        map.setOnCameraIdleListener(mClusterManager)
-        map.setOnMarkerClickListener(mClusterManager)
-
-    }
-
-
-    private fun createClusterMarker(lat: Double, lng: Double, title: String, snippet: String) {
-        val offsetItem = MyClusterItem(lat, lng, title, "snippet")
-        mClusterManager!!.addItem(offsetItem)
-        mClusterManager!!.cluster()
-    }
 
 }
