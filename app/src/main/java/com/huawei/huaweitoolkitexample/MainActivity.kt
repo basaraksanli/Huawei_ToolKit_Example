@@ -4,6 +4,7 @@ package com.huawei.huaweitoolkitexample
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -12,13 +13,15 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.StreetViewPanoramaOptions
-import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.GroundOverlayOptions
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 import java.util.*
 
 
@@ -52,20 +55,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap?) {
         mMap = p0
 
-        val home = LatLng(37.421982, -122.085109)
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(home, INITIAL_ZOOM))
+        val build = CameraPosition.Builder().target(LatLng(38.423733, 27.142826)).zoom(15f).build()
+        val cameraUpdate = CameraUpdateFactory.newCameraPosition(build)
+        mMap?.animateCamera(cameraUpdate)
 
         val homeOverlay = GroundOverlayOptions()
-            .image(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_dialog_map))
-            .position(home, 100f)
+            .image(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_camera))
+            .position(LatLng(38.423733, 27.142826), 500f)
         mMap?.addGroundOverlay(homeOverlay)
+
+        val mCircle = mMap!!.addCircle(CircleOptions().center(LatLng(38.423733, 27.142826)).radius(500.0)
+                .fillColor(Color.RED)
+        )
+
+
 
 
 
         setMapLongClick(mMap!!); // Set a long click listener for the map;
         setPoiClick(mMap!!) // Set a click listener for points of interest.
         enableMyLocation(mMap!!) // Enable location tracking.
-        setInfoWindowClickToPanorama(mMap!!)
 
     }
 
@@ -112,29 +121,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             )
         }
     }
-
-    private fun setInfoWindowClickToPanorama(map: GoogleMap) {
-        map.setOnInfoWindowClickListener { marker ->
-            // Check the tag
-            if (marker.tag === "poi") {
-
-                // Set the position to the position of the marker
-                val options = StreetViewPanoramaOptions().position(
-                    marker.position
-                )
-                val streetViewFragment = SupportStreetViewPanoramaFragment
-                    .newInstance(options)
-
-                // Replace the fragment and add it to the backstack
-                supportFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.fragment_container,
-                        streetViewFragment
-                    )
-                    .addToBackStack(null).commit()
-            }
-        }
-    }
-
 
 }

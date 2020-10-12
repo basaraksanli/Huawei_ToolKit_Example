@@ -27,4 +27,5 @@
     <string name="event1">Event1</string>
     <string name="event2">Event2</string>
     <string name="event3">Event3</string>
+    <string name="stop">Stop</string>
 </resources>
