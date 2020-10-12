@@ -12,33 +12,41 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.LocationListener
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
-
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationServices.*
 
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class LocationActivity : AppCompatActivity() , LocationListener {
-    internal var mLastLocation: Location? = null
-    internal lateinit var mLocationRequest: LocationRequest
-    var locationText: TextView? = null
-    var getLocationButton : Button? = null
+    private var mLastLocation: Location? = null
+    private lateinit var mLocationRequest: LocationRequest
+    private var locationText: TextView? = null
+    private var getLocationButton : Button? = null
+    private var stopLocationButton : Button?= null
+    private var fusedLocationProviderClient : FusedLocationProviderClient? =null
+    private var mLocationCallback : LocationCallback?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
 
         locationText = findViewById(R.id.textview_location)
-        getLocationButton = findViewById(R.id.button_location)
+        getLocationButton = findViewById(R.id.start_button_location)
+        stopLocationButton = findViewById(R.id.stop_button_location)
+
 
         getLocationButton!!.setOnClickListener {
             createLocationRequest()
+        }
+        stopLocationButton!!.setOnClickListener{
+            removeLocationUpdatesWithCallback()
         }
 
         val floatingActionButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
@@ -80,14 +88,17 @@ class LocationActivity : AppCompatActivity() , LocationListener {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION) ,111)
             return
         }
-        getFusedLocationProviderClient(this).requestLocationUpdates(
-            mLocationRequest, object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    onLocationChanged(locationResult.lastLocation)
-                }
-            },
+        mLocationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                onLocationChanged(locationResult.lastLocation)
+            }
+        }
+        fusedLocationProviderClient=getFusedLocationProviderClient(this)
+        fusedLocationProviderClient!!.requestLocationUpdates(
+            mLocationRequest, mLocationCallback,
             Looper.myLooper()
         )
+
     }
 
     override fun onRequestPermissionsResult(
@@ -98,5 +109,22 @@ class LocationActivity : AppCompatActivity() , LocationListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         createLocationRequest()
     }
-
+    private fun removeLocationUpdatesWithCallback() {
+        try {
+            fusedLocationProviderClient!!.removeLocationUpdates(mLocationCallback)
+                .addOnSuccessListener {
+                    locationText!!.append(
+                        "removeLocationUpdatesWithCallback onSuccess\n\n"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    locationText!!.append(
+                        "removeLocationUpdatesWithCallback onFailure:${e.message}\n\n"
+                    )
+                }
+        } catch (e: Exception) {
+            locationText!!.append("removeLocationUpdatesWithCallback exception:${e.message}\n\n"
+            )
+        }
+    }
 }

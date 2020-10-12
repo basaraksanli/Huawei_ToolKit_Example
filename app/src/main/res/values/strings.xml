@@ -28,4 +28,6 @@
     <string name="event2">Event2</string>
     <string name="event3">Event3</string>
     <string name="stop">Stop</string>
+    <string name="set_favorite_sport">Set Favorite Sport</string>
+    <string name="favorite_sport">Favorite Sport</string>
 </resources>

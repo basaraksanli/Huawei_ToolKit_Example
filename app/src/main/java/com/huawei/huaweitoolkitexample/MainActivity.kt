@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             .position(LatLng(38.423733, 27.142826), 500f)
         mMap?.addGroundOverlay(homeOverlay)
 
-        val mCircle = mMap!!.addCircle(CircleOptions().center(LatLng(38.423733, 27.142826)).radius(500.0)
+        mMap!!.addCircle(CircleOptions().center(LatLng(38.423733, 27.142826)).radius(500.0)
                 .fillColor(Color.RED)
         )
 
