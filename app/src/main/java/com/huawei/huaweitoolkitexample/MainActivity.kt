@@ -9,16 +9,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.GroundOverlayOptions
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import org.xms.g.maps.CameraUpdateFactory
+import org.xms.g.maps.ExtensionMap
+import org.xms.g.maps.OnMapReadyCallback
+import org.xms.g.maps.SupportMapFragment
+import org.xms.g.maps.model.LatLng
+import org.xms.g.maps.model.CameraPosition
+import org.xms.g.maps.model.GroundOverlayOptions
+import org.xms.g.maps.model.BitmapDescriptorFactory
+import org.xms.g.maps.model.CircleOptions
+import org.xms.g.maps.model.MarkerOptions
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val REQUEST_LOCATION_PERMISSION = 1
     val INITIAL_ZOOM = 12f
-    private var mMap: GoogleMap? = null
+    private var mMap: ExtensionMap? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-    override fun onMapReady(p0: GoogleMap?) {
+    override fun onMapReady(p0: ExtensionMap?) {
         mMap = p0
 
         val build = CameraPosition.Builder().target(LatLng(38.423733, 27.142826)).zoom(15f).build()
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             .position(LatLng(38.423733, 27.142826), 500f)
         mMap?.addGroundOverlay(homeOverlay)
 
-        mMap!!.addCircle(CircleOptions().center(LatLng(38.423733, 27.142826)).radius(500.0)
+        mMap!!.addCircle(CircleOptions().center(LatLng(38.422731, 27.129463)).radius(500.0)
                 .fillColor(Color.RED)
         )
 
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    private fun setMapLongClick(map: GoogleMap) {
+    private fun setMapLongClick(map: ExtensionMap) {
 
         map.setOnMapLongClickListener { latLng ->
             val snippet: String = java.lang.String.format(
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun setPoiClick(map: GoogleMap) {
+    private fun setPoiClick(map: ExtensionMap) {
         map.setOnPoiClickListener { poi ->
 
             val markerOptions = MarkerOptions().position(poi.latLng).title(poi.name).snippet(poi.latLng.toString())
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun enableMyLocation(map: GoogleMap) {
+    private fun enableMyLocation(map: ExtensionMap) {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION

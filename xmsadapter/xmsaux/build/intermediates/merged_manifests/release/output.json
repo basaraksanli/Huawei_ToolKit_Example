@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "applicationId": "org.xms.xmsaux",
+  "variantType": "LIBRARY",
+  "elements": [
+    {
+      "outputType": {
+        "type": "MERGED_MANIFESTS"
+      },
+      "apkData": {
+        "type": "MAIN",
+        "splits": [],
+        "versionCode": -1,
+        "outputFile": "xmsaux-release.aar",
+        "fullName": "release",
+        "baseName": "release",
+        "dirName": ""
+      },
+      "path": "../../library_manifest/release/AndroidManifest.xml",
+      "properties": {
+        "packageId": "org.xms.xmsaux",
+        "split": ""
+      }
+    }
+  ]
+}

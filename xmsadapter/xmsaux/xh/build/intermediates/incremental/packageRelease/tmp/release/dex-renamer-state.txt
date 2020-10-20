@@ -1,0 +1,4 @@
+#Tue Oct 20 11:25:21 EET 2020
+base.0=C\:\\Users\\basar\\AndroidStudioProjects\\HuaweiToolKitExample\\xmsadapter\\xmsaux\\xh\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

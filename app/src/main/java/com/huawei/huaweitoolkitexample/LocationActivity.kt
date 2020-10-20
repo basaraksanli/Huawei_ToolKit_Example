@@ -11,14 +11,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.LocationListener
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationServices.*
+import org.xms.g.location.LocationListener
+import org.xms.g.location.LocationResult
+import org.xms.g.location.LocationRequest
+import org.xms.g.location.FusedLocationProviderClient
+import org.xms.g.location.LocationCallback
+import org.xms.g.location.LocationSettingsRequest
+import org.xms.g.location.LocationServices
+import org.xms.g.location.LocationServices.*
 
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -67,7 +67,7 @@ class LocationActivity : AppCompatActivity() , LocationListener {
         mLocationRequest = LocationRequest()
         mLocationRequest.interval = 1000
         mLocationRequest.fastestInterval = 1000
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.priority = LocationRequest.getPRIORITY_HIGH_ACCURACY()
 
         val builder = LocationSettingsRequest.Builder()
         builder.addLocationRequest(mLocationRequest)

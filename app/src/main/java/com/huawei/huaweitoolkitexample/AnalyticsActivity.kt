@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.analytics.FirebaseAnalytics
+import org.xms.f.analytics.ExtensionAnalytics
 
 class AnalyticsActivity : AppCompatActivity() {
-    private var analyticsInstance :FirebaseAnalytics? = null
+    private var analyticsInstance :ExtensionAnalytics? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class AnalyticsActivity : AppCompatActivity() {
         val favoriteSportButton = findViewById<Button>(R.id.favoriteSportButton)
         val favoriteSportText = findViewById<EditText>(R.id.favoriteSportText)
 
-        analyticsInstance = FirebaseAnalytics.getInstance(this)
+        analyticsInstance = ExtensionAnalytics.getInstance(this)
 
         val event1button = findViewById<Button>(R.id.event1button)
         val event2button = findViewById<Button>(R.id.event2button)
@@ -34,29 +34,28 @@ class AnalyticsActivity : AppCompatActivity() {
 
         analyticsInstance!!.setAnalyticsCollectionEnabled(true)
         analyticsInstance!!.setUserId("user1")
-        analyticsInstance!!.setCurrentScreen(this, "AnalyticsPage", "com.huawei.huaweitoolkitexample.AnalyticsActivity")
 
 
         event1button!!.setOnClickListener{
             bundle =  Bundle()
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1");
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "event1");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
-            analyticsInstance!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+            bundle.putString(ExtensionAnalytics.Param.getITEM_ID(), "1");
+            bundle.putString(ExtensionAnalytics.Param.getITEM_NAME(), "event1");
+            bundle.putString(ExtensionAnalytics.Param.getCONTENT_TYPE(), "image")
+            analyticsInstance!!.logEvent(ExtensionAnalytics.Event.getSELECT_CONTENT(), bundle)
         }
         event2button!!.setOnClickListener{
             bundle =  Bundle()
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "2");
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "event2");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text")
-            analyticsInstance!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+            bundle.putString(ExtensionAnalytics.Param.getITEM_ID(), "2");
+            bundle.putString(ExtensionAnalytics.Param.getITEM_NAME(), "event2");
+            bundle.putString(ExtensionAnalytics.Param.getCONTENT_TYPE(), "text")
+            analyticsInstance!!.logEvent(ExtensionAnalytics.Event.getSELECT_CONTENT(), bundle)
         }
         event3button!!.setOnClickListener{
             bundle =  Bundle()
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "3");
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "event3");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
-            analyticsInstance!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+            bundle.putString(ExtensionAnalytics.Param.getITEM_ID(), "3");
+            bundle.putString(ExtensionAnalytics.Param.getITEM_NAME(), "event3");
+            bundle.putString(ExtensionAnalytics.Param.getCONTENT_TYPE(), "button")
+            analyticsInstance!!.logEvent(ExtensionAnalytics.Event.getSELECT_CONTENT(), bundle)
         }
 
         favoriteSportButton.setOnClickListener{
